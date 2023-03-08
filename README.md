@@ -1,0 +1,2 @@
+# UnityDemo_PngTexReadWrite
+Png贴图没有打开可读写开关下的读写
