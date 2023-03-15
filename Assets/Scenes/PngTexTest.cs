@@ -83,18 +83,18 @@ public class PngTexTest : MonoBehaviour
 
         if (bytes != null)
         {
-            Texture2D neighborTex = new Texture2D(oldTex.width, oldTex.height, TextureFormat.RGBA32, false);
-            var isSuccess = neighborTex.LoadImage(bytes);
+            Texture2D copyTex = new Texture2D(oldTex.width, oldTex.height, TextureFormat.RGBA32, false);
+            var isSuccess = copyTex.LoadImage(bytes);
             if (!isSuccess)
             {
-                Debug.LogError("RepairTextureMgr.AddTextureCommon Texture2D.LoadImage ´íÎó");
+                Debug.LogError("Texture2D.LoadImage ´íÎó");
             }
 
-            neighborTex.Apply();
+            copyTex.Apply();
 
             var newAssetPath = AssetDatabase.GetAssetPath(newTex);
             var absTexPath = AssetsPath2ABSPath(newAssetPath);
-            File.WriteAllBytes(absTexPath, neighborTex.EncodeToPNG());
+            File.WriteAllBytes(absTexPath, copyTex.EncodeToPNG());
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
