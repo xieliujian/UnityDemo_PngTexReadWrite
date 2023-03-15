@@ -96,6 +96,7 @@ public class PngTexTest : MonoBehaviour
             var absTexPath = AssetsPath2ABSPath(newAssetPath);
             File.WriteAllBytes(absTexPath, neighborTex.EncodeToPNG());
             AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
     }
 
