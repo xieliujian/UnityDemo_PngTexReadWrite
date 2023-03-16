@@ -5,19 +5,19 @@
 ```C#
 
 // 根据绝对路径读取二进制
-var bytes = File.ReadAllBytes(absOldAssetPath);
+var bytes = File.ReadAllBytes(absSrcAssetPath);
 
-// 贴图可读写保存，格式设置为RGBA32
-Texture2D copyTex = new Texture2D(oldTex.width, oldTex.height, TextureFormat.RGBA32, false);
+// 贴图可读写保存，格式设置为RGBA32，宽度高度默认0就可以，会从数据中直接赋值
+Texture2D pngTex = new Texture2D(0, 0, TextureFormat.RGBA32, false);
 
 // 加载数据
-newTex.LoadImage(bytes);
+pngTex.LoadImage(bytes);
 
 // 修改数据，保存数据
-copyTex.Apply();
+pngTex.Apply();
 
 // 保存贴图
-File.WriteAllBytes(absTexPath, copyTex.EncodeToPNG());
+File.WriteAllBytes(absDstAssetPath, pngTex.EncodeToPNG());
 
 ```
 
