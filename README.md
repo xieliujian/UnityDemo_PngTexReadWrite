@@ -1,34 +1,27 @@
 # UnityDemo_PngTexReadWrite
 
-Png贴图没有打开可读写开关下的读写
-
+> 这个Demo用来展示Png贴图没有打开可读写开关下的读写， 为什么有这个需求，有的时候不想修改TextureImporter, 刷新Unity, 可以用直接读取文件的形式操作
 
 ```C#
 
 // 根据绝对路径读取二进制
 var bytes = File.ReadAllBytes(absOldAssetPath);
 
+// 贴图可读写保存，格式设置为RGBA32
 Texture2D copyTex = new Texture2D(oldTex.width, oldTex.height, TextureFormat.RGBA32, false);
 
+// 加载数据
 newTex.LoadImage(bytes);
 
-if (bytes != null)
-{
-    Texture2D copyTex = new Texture2D(oldTex.width, oldTex.height, TextureFormat.RGBA32, false);
-    var isSuccess = newTex.LoadImage(bytes);
-    if (!isSuccess)
-    {
-        Debug.LogError("Texture2D.LoadImage 错误");
-    }
+// 修改数据，保存数据
+copyTex.Apply();
 
-    copyTex.Apply();
+// 保存贴图
+File.WriteAllBytes(absTexPath, copyTex.EncodeToPNG());
 
-    var newAssetPath = AssetDatabase.GetAssetPath(newTex);
-    var absTexPath = AssetsPath2ABSPath(newAssetPath);
-    File.WriteAllBytes(absTexPath, copyTex.EncodeToPNG());
-    AssetDatabase.SaveAssets();
-    AssetDatabase.Refresh();
-}
+```
 
-``` 
+
+
+
 
