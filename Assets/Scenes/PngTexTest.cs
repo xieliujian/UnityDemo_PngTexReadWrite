@@ -18,6 +18,15 @@ public class PngTexTest : MonoBehaviour
         SceneView.duringSceneGui += OnSceneGui;
     }
 
+    private void OnGUI()
+    {
+        GUIStyle fontStyle = new GUIStyle();
+        fontStyle.normal.textColor = Color.white;
+        fontStyle.fontSize = 40;
+
+        GUI.Label(new Rect(0, 0, 300, 300), "°´O¼ü¶ÁÈ¡Ð´ÈëÌùÍ¼, °´I¼ü±È½ÏÌùÍ¼²îÒì", fontStyle);
+    }
+
     void OnSceneGui(SceneView sceneView)
     {
         bool isKeyUp = Event.current.type == EventType.KeyUp;
@@ -40,14 +49,26 @@ public class PngTexTest : MonoBehaviour
 
     void CompareTexture()
     {
-        if (oldTex == null)
+        if (oldTex == null || newTex == null)
             return;
 
-        if (newTex == null)
-            return;
+        var oldAssetPath = AssetDatabase.GetAssetPath(oldTex);
+        var absOldAssetPath = AssetsPath2ABSPath(oldAssetPath);
 
-        var oldColors = oldTex.GetPixels32();
-        var newColors = newTex.GetPixels32();
+        var newAssetPath = AssetDatabase.GetAssetPath(newTex);
+        var absNewAssetPath = AssetsPath2ABSPath(newAssetPath);
+
+
+        PngTexture oldPngTex = new PngTexture();
+        PngTexture newPngTex = new PngTexture();
+
+        oldPngTex.Load(absOldAssetPath);
+        newPngTex.Load(absNewAssetPath);
+
+        var oldColors = oldPngTex.GetPixels32();
+        var newColors = newPngTex.GetPixels32();
+        if (oldColors == null || newColors == null)
+            return;
 
         bool find = false;
 
@@ -79,25 +100,16 @@ public class PngTexTest : MonoBehaviour
 
         var oldAssetPath = AssetDatabase.GetAssetPath(oldTex);
         var absOldAssetPath = AssetsPath2ABSPath(oldAssetPath);
-        var bytes = File.ReadAllBytes(absOldAssetPath);
 
-        if (bytes != null)
-        {
-            Texture2D copyTex = new Texture2D(oldTex.width, oldTex.height, TextureFormat.RGBA32, false);
-            var isSuccess = copyTex.LoadImage(bytes);
-            if (!isSuccess)
-            {
-                Debug.LogError("Texture2D.LoadImage ´íÎó");
-            }
+        var newAssetPath = AssetDatabase.GetAssetPath(newTex);
+        var absNewAssetPath = AssetsPath2ABSPath(newAssetPath);
 
-            copyTex.Apply();
+        PngTexture pngTex = new PngTexture();
+        pngTex.Load(absOldAssetPath);
+        pngTex.SaveAs(absNewAssetPath);
 
-            var newAssetPath = AssetDatabase.GetAssetPath(newTex);
-            var absTexPath = AssetsPath2ABSPath(newAssetPath);
-            File.WriteAllBytes(absTexPath, copyTex.EncodeToPNG());
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 
     public string AssetsPath2ABSPath(string assetsPath)
