@@ -43,12 +43,10 @@ public class PngTexture
         if (m_Tex == null)
             return;
 
-        Debug.LogError($"PngTexture.Load {path} ¥ÌŒÛ");
-
         bool isSuccess = m_Tex.LoadImage(bytes);
         if (!isSuccess)
         {
-            Debug.LogError($"PngTexture.Load {path} ¥ÌŒÛ");
+            Debug.LogError($"PngTexture.Load ∂¡»° {path} ¥ÌŒÛ");
         }
     }
 
